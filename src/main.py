@@ -1,11 +1,11 @@
 import os
 import json
 import argparse 
-from logger import *
-from args import arg_parse_rules
+from src.logger import *
+from src.args import arg_parse_rules
 from argparse import ArgumentParser
-from tui import entry_point, collect_pipe_input
-from constants import CWD
+from src.tui import entry_point, collect_pipe_input
+from src.constants import CWD
 
 def get_argument_setting_values(arg_settings: dict)->tuple[list, dict]:
     """This function takes the settings for any arg in the args/json/*.json file and parses them.

@@ -1,14 +1,12 @@
 import os
-import editor
 import subprocess
-from logger import *
-from constants import OPTIONS, PLATFORM
-from prompt_toolkit import prompt
-from prompt_toolkit.key_binding.vi_state import InputMode
-from prompt_toolkit.completion import Completer, Completion, ThreadedCompleter
-from argparse import ArgumentParser
-from walker.datacache import cache_data, load_cache_data
+from src.logger import *
 from google.cloud import storage
+from prompt_toolkit import prompt
+from argparse import ArgumentParser
+from src.constants import OPTIONS, PLATFORM
+from src.walker.datacache import cache_data, load_cache_data
+from prompt_toolkit.completion import Completer, Completion, ThreadedCompleter
 
 class SideCompletion(Completer):
     def __init__(self):
