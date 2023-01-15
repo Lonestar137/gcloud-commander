@@ -6,7 +6,7 @@
             "long_form": "--basepath"
         },
         "action": "",
-        "help": "A flag to predefine basepath",
+        "help": "Adds a new base path to the cache.",
         "type": "str",
         "default": ".",
         "nargs": "+",
@@ -19,7 +19,7 @@
             "long_form": "--aging"
         },
         "action": "",
-        "help": "Determines how long new folders should be stored in cache(i.e., how quickly they age and are removed from cache)",
+        "help": "Determines how long new folders should be stored in cache(i.e., how quickly they age and are removed from cache)[Not yet implemented]",
         "type": "int",
         "default": "",
         "nargs": 1,

@@ -7,6 +7,11 @@ lorem ipsum
 - [FZF](https://github.com/junegunn/fzf.git) can be installed in many ways and is supported on PC platforms.  My favorite way of installing is with a CLI tool such as Chocolaty(Windows), Brew(Mac), or local package manager(Linux).
 - Python Version >= 3.5
 
+## How to
+
+1. Add a new basepath, run the program with the `-b` or `--basepath` flag.  I.e. `gcmdr -b gs://bucket_name/my_folder`
+2. Enable vim keybinds: `gcmdr -v` or `gcmdr --vim`
+
 ## Philosophy
 
 1. Make your application do one thing and do it well: Write your application to perform a specific task, and make sure it does that task well. Avoid adding unnecessary features that would make the application more complex.
