@@ -8,6 +8,7 @@ from prompt_toolkit.key_binding.vi_state import InputMode
 from prompt_toolkit.completion import Completer, Completion, ThreadedCompleter
 from argparse import ArgumentParser
 from walker.datacache import cache_data, load_cache_data
+from google.cloud import storage
 
 class SideCompletion(Completer):
     def __init__(self):
@@ -31,26 +32,37 @@ class SideCompletion(Completer):
 
 
             for opt in self.options:
-                if last_word in opt:
+                # if last_word in opt:
+                if opt.startswith(last_word):
                     rest_of_word = opt[len(last_word):]
                     yield Completion(rest_of_word)
 
-def localdir(args: ArgumentParser, base_path_to_fzf: str)->str:
-    base_path_to_fzf = base_path_to_fzf.replace('\n', '')
-    fzf = subprocess.Popen(["fzf"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+def echo_localdir(args: ArgumentParser, base_path_to_fzf: str, fzf: subprocess.Popen)->None:
     for dirpath, dirnames, filenames in os.walk(base_path_to_fzf):
         dirpath = dirpath.replace('\\', '/')
         for filename in filenames:
             line = f"{dirpath}/{filename}\n"
             fzf.stdin.write((line).encode())
 
+def echo_gcpdir(args: ArgumentParser, bucket_name: str, fzf: subprocess.Popen)->None:
+    client = storage.Client()
+    bucket_contents = client.list_blobs(bucket_name)
+    for i in bucket_contents:
+        fzf.stdin.write((i).encode())
+
+
+def walkdir(args: ArgumentParser, base_path_to_fzf: str)->str:
+    base_path_to_fzf = base_path_to_fzf.replace('\n', '')
+    fzf = subprocess.Popen(["fzf"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+    if base_path_to_fzf.startswith("gs://"):
+        echo_gcpdir(args, base_path_to_fzf, fzf)
+    else:
+        echo_localdir(args, base_path_to_fzf, fzf)
+
     fzf.stdin.close()
     output, _ = fzf.communicate()
     output = output.decode()
     return output
-
-def gcpdir(args, base_path_to_fzf):
-    pass
 
 def start_fzf(args: ArgumentParser, to_send: str)->str:
     fzf = subprocess.Popen(["fzf"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
@@ -62,8 +74,8 @@ def start_fzf(args: ArgumentParser, to_send: str)->str:
     return output
 
 def mv_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->tuple[str, str]:
-        left_selected: str = localdir(args, base_path_to_fzf) 
-        right_selected: str = localdir(args, base_path_to_fzf).strip()
+        left_selected: str = walkdir(args, base_path_to_fzf) 
+        right_selected: str = walkdir(args, base_path_to_fzf).strip()
 
         side_winder_completer = SideCompletion()
         thread_completer = ThreadedCompleter(side_winder_completer)
@@ -74,8 +86,8 @@ def mv_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->tuple[str
         return left_selected, right_selected
 
 def cp_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->tuple[str, str]:
-        left_selected: str = localdir(args, base_path_to_fzf) # TODO add OPEN in browser option
-        right_selected: str = localdir(args, base_path_to_fzf).strip()
+        left_selected: str = walkdir(args, base_path_to_fzf) # TODO add OPEN in browser option
+        right_selected: str = walkdir(args, base_path_to_fzf).strip()
         if args.vim == True:
             right_selected = prompt("Copy to: ", default=right_selected.replace('\n', ''), vi_mode=True)
         else: 
@@ -83,7 +95,7 @@ def cp_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->tuple[str
         return left_selected, right_selected
 
 def rm_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->tuple[str, str]:
-        left_selected: str = localdir(args, base_path_to_fzf) # TODO add OPEN in browser option
+        left_selected: str = walkdir(args, base_path_to_fzf) # TODO add OPEN in browser option
         right_selected: str = ""
         return left_selected, right_selected
 
@@ -112,13 +124,23 @@ def surf(args: ArgumentParser, basepath: str):
         base_path_to_fzf = start_fzf(args, basepath_options)
         print("Base path to look inside of ",base_path_to_fzf)
 
+        if(base_path_to_fzf.startswith("gs://")):
+            google_env_variable = 'GOOGLE_APPLICATION_CREDENTIALS'
+            try: 
+                os.environ[google_env_variable] 
+            except: 
+                print(f"gsutil credentials environment variable not set. \nCheck the {google_env_variable} environment variable.")
+
+
         action: str = start_fzf(args, OPTIONS)
         result_cmd = action_logic(args, action, base_path_to_fzf)
 
+        side_winder_completer = SideCompletion()
+        thread_completer = ThreadedCompleter(side_winder_completer)
         if args.vim == True:
-            result_cmd = prompt("Run this command? ", default=result_cmd, vi_mode=True)
+            result_cmd = prompt("Run this command? ", default=result_cmd, completer=thread_completer,vi_mode=True)
         else: 
-            result_cmd = prompt("Run this command? ", default=result_cmd)
+            result_cmd = prompt("Run this command? ", default=result_cmd, completer=thread_completer)
 
         # TODO os.exec(result_cmd)
         print("Executed", result_cmd)
