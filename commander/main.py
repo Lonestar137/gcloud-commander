@@ -1,11 +1,10 @@
-from args.stdarg import CollectionOfArgs, StandardArg
-from args import arg_parse_rules
-from tui import entry_point, collect_pipe_input
-import argparse 
-from argparse import ArgumentParser
-import json
 import os
-import sys
+import json
+import argparse 
+from logger import *
+from args import arg_parse_rules
+from argparse import ArgumentParser
+from tui import entry_point, collect_pipe_input
 
 def get_argument_setting_values(arg_settings: dict)->tuple[list, dict]:
     """This function takes the settings for any arg in the args/json/*.json file and parses them.
@@ -40,9 +39,10 @@ def build_args_and_parse(arg_json_directory: str)->ArgumentParser:
                     parser.add_argument(*positional_parameters, **kwparameters)
                 except Exception as e:
                     print(f"There was a problem processing the values in {filepath} for argument '{arg_name}'")
-                    print("Full params", arg)
-                    print("Filtered params", positional_parameters, kwparameters)
-                    print("Trace:", e)
+                    logging.warn(f"There was a problem processing the values in {filepath} for argument '{arg_name}'")
+                    logging.warn("Full params: " + arg)
+                    logging.warn("Filtered params\n"+ positional_parameters + "\n" + kwparameters)
+                    logging.warn("Trace:"+ e)
 
 
     # parse the arguments
@@ -54,12 +54,15 @@ def build_args_and_parse(arg_json_directory: str)->ArgumentParser:
     #     print("Flag is not set")
 
     if args.debug == True:
-        print("Created Arguments:", args)
+        logging.info("Created Arguments:", args)
     return args
 
 if __name__ == "__main__":
-    arg_json_directory = "./cmd/args/json/"
+    
+    # arg_json_directory = "./commander/args/json/"
+    cwd = os.getcwd().replace('\\', '/')
+    arg_json_directory = f"{cwd}/commander/args/json/"
 
     args: ArgumentParser = build_args_and_parse(arg_json_directory)
 
-    # entry_point(collect_pipe_input(), [])
+    entry_point(collect_pipe_input(), args)

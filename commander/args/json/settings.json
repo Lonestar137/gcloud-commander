@@ -22,7 +22,7 @@
         "help": "Determines how long new folders should be stored in cache(i.e., how quickly they age and are removed from cache)",
         "type": "int",
         "default": "",
-        "nargs": "1",
+        "nargs": 1,
         "choices": []
     }
 }

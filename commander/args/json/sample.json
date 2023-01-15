@@ -9,7 +9,7 @@
         "help": "example flag, if you use this flag then this setting will be 'toggled on' by the 'action', sets the value to true.",
         "type": "",
         "default": "",
-        "nargs": "1",
+        "nargs": 1,
         "choices": []
     },
     "enable debugging": {
@@ -22,7 +22,7 @@
         "help": "Temporary setting for developers!",
         "type": "",
         "default": "",
-        "nargs": "1",
+        "nargs": 1,
         "choices": []
     }
 }

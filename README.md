@@ -19,4 +19,4 @@ lorem ipsum
 
 5. Make the application easy to extend: Write your application in a way that makes it easy for other developers to extend and customize it. For example, use a plugin architecture or make it easy to subclass key components.
 
-6. Follow the best practices for writing maintainable code, such as using version control, automated testing, and documentation.
+6. Follow the best practices for writing maintainable code, such as using version control, automated testing, and documentation.  
