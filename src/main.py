@@ -7,8 +7,6 @@ from argparse import ArgumentParser
 from tui import entry_point, collect_pipe_input
 from constants import CWD
 
-# CWD = os.getcwd().replace('\\', '/')
-
 def get_argument_setting_values(arg_settings: dict)->tuple[list, dict]:
     """This function takes the settings for any arg in the args/json/*.json file and parses them.
 
@@ -53,10 +51,13 @@ def build_args_and_parse(arg_json_directory: str)->ArgumentParser:
         logging.info("Created Arguments:", args)
     return args
 
-if __name__ == "__main__":
-    arg_json_directory = f"{CWD}/commander/args/json/"
+def main():
+    arg_json_directory = f"{CWD}/src/args/json/"
 
     args: ArgumentParser = build_args_and_parse(arg_json_directory)
 
     # entry_point(collect_pipe_input(), args)
     entry_point("", args)
+
+if __name__ == "__main__":
+    main()

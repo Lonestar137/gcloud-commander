@@ -2,3 +2,5 @@ venv/*
 *__pycache__*
 *.log
 *cache/*
+dist*
+gcloud_commander.egg-info/*
