@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "24ad3247b1a68d636e106e354e171aa34f91f757f03d72866da09aef9eef8f72"
+            "sha256": "d20c5dc6f922892fa67874e153277ef3b430b25328d78cb141c151b679821804"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -31,6 +31,28 @@
             ],
             "markers": "sys_platform == 'win32'",
             "version": "==0.4.6"
+        },
+        "dek": {
+            "hashes": [
+                "sha256:1648069e60734936dcce1fedf201176b9af703d355442e9d0be1018dcdfa74c2",
+                "sha256:c3731f73b38ef0c636d5101e1eac60a79a03823359a2d57a632b8a308e60545b"
+            ],
+            "markers": "python_version >= '3.7' and python_version < '4.0'",
+            "version": "==1.0.2"
+        },
+        "docopt": {
+            "hashes": [
+                "sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491"
+            ],
+            "version": "==0.6.2"
+        },
+        "editor": {
+            "hashes": [
+                "sha256:5c96dde837a629404f6dd2125c2e1943a834ad4d8f0c2954f46a6e7a65de3dc8",
+                "sha256:fa7db22c89b97d877125248c6ec8acded59dc6c4ce0fff05ce7869843a489d5b"
+            ],
+            "index": "pypi",
+            "version": "==1.2.1"
         },
         "exceptiongroup": {
             "hashes": [
@@ -64,6 +86,30 @@
             "markers": "python_version >= '3.6'",
             "version": "==1.0.0"
         },
+        "prompt-toolkit": {
+            "hashes": [
+                "sha256:3e163f254bef5a03b146397d7c1963bd3e2812f0964bb9a24e6ec761fd28db63",
+                "sha256:aa64ad242a462c5ff0363a7b9cfe696c20d55d9fc60c11fd8e632d064804d305"
+            ],
+            "markers": "python_full_version >= '3.6.2'",
+            "version": "==3.0.36"
+        },
+        "pyflakes": {
+            "hashes": [
+                "sha256:ec55bf7fe21fff7f1ad2f7da62363d749e2a470500eab1b555334b67aa1ef8cf",
+                "sha256:ec8b276a6b60bd80defed25add7e439881c19e64850afd9b346283d4165fd0fd"
+            ],
+            "markers": "python_version >= '3.6'",
+            "version": "==3.0.1"
+        },
+        "pygments": {
+            "hashes": [
+                "sha256:b3ed06a9e8ac9a9aae5a6f5dbe78a8a58655d17b43b93c078f094ddc476ae297",
+                "sha256:fa7bd7bd2771287c0de303af8bfdfc731f51bd2c6a47ab69d117138893b82717"
+            ],
+            "markers": "python_version >= '3.6'",
+            "version": "==2.14.0"
+        },
         "pytest": {
             "hashes": [
                 "sha256:c7c6ca206e93355074ae32f7403e8ea12163b1163c976fee7d4d84027c162be5",
@@ -71,6 +117,29 @@
             ],
             "index": "pypi",
             "version": "==7.2.1"
+        },
+        "pyvim": {
+            "hashes": [
+                "sha256:2a3506690f73a79dd02cdc45f872d3edf20a214d4c3666d12459e2ce5b644baa",
+                "sha256:54cc831ee0c5d2ec0b2fa111ea98f7e13e022670a43d4091356b7a542db9683e"
+            ],
+            "index": "pypi",
+            "version": "==3.0.3"
+        },
+        "runs": {
+            "hashes": [
+                "sha256:702a31bec6d3336175ab6dcadd605ebd39b75d792a98303202b090d4556883e3",
+                "sha256:c8685f129e54086f103b365c8d20c3f117f7518d0717962905c96248643530ef"
+            ],
+            "version": "==1.1.0"
+        },
+        "six": {
+            "hashes": [
+                "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926",
+                "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"
+            ],
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
+            "version": "==1.16.0"
         },
         "tomli": {
             "hashes": [
@@ -87,6 +156,19 @@
             ],
             "index": "pypi",
             "version": "==3.7.4.3"
+        },
+        "wcwidth": {
+            "hashes": [
+                "sha256:a5220780a404dbe3353789870978e472cfe477761f06ee55077256e509b156d0"
+            ],
+            "version": "==0.2.6"
+        },
+        "xmod": {
+            "hashes": [
+                "sha256:3c844020a6b74d614ae0cf3d474098f4d035e1669ce2807ed08ef2f6ca3937fb",
+                "sha256:a95b0b3d3d67481d33dc1bb53abb88775d26e967e5a2280033030fe25a147f3f"
+            ],
+            "version": "==1.3.2"
         }
     },
     "develop": {}

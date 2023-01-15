@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 typing = "*"
 pytest = "*"
+editor = "*"
+pyvim = "*"
 
 [dev-packages]
 

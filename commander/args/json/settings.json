@@ -24,5 +24,18 @@
         "default": "",
         "nargs": 1,
         "choices": []
+    },
+    "vi-mode": {
+        "required": false,
+        "flags": {
+            "small_form": "-v",
+            "long_form": "--vim"
+        },
+        "action": "store_true",
+        "help": "Enables vim input for some text screens",
+        "type": "",
+        "default": "",
+        "nargs": 1,
+        "choices": []
     }
 }
