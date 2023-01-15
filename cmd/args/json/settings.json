@@ -1,0 +1,28 @@
+{
+    "basepath": {
+        "required": false,
+        "flags": {
+            "small_form": "-b",
+            "long_form": "--basepath"
+        },
+        "action": "",
+        "help": "A flag to predefine basepath",
+        "type": "int",
+        "default": "",
+        "nargs": "+",
+        "choices": []
+    },
+    "aging": {
+        "required": false,
+        "flags": {
+            "small_form": "-a",
+            "long_form": "--aging"
+        },
+        "action": "",
+        "help": "Determines how long new folders should be stored in cache(i.e., how quickly they age and are removed from cache)",
+        "type": "int",
+        "default": "",
+        "nargs": "1",
+        "choices": []
+    }
+}
