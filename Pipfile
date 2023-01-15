@@ -6,6 +6,9 @@ name = "pypi"
 [packages]
 typing = "*"
 pytest = "*"
+editor = "*"
+pyvim = "*"
+google-cloud-storage = "*"
 
 [dev-packages]
 
