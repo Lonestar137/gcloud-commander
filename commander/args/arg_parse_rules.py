@@ -16,9 +16,9 @@ def should_action_be_added(settings: dict, arg_parse_params: dict)->dict:
 def should_type_be_added(settings: dict, arg_parse_params: dict)->dict:
     if settings['action'] != '' and settings['type'] != '':
         if settings['type'] == 'int':
-            arg_parse_params.update({"type": int(settings['type'])})
+            arg_parse_params.update({"type": int})
         elif settings['type'] == 'str':
-            arg_parse_params.update({"type": str(settings['type'])})
+            arg_parse_params.update({"type": str})
     return arg_parse_params
 
 def should_choice_be_added(settings: dict, arg_parse_params: dict)->dict:
