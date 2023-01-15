@@ -2,7 +2,7 @@ import os
 import editor
 import subprocess
 from logger import *
-from constants import OPTIONS
+from constants import OPTIONS, PLATFORM
 from prompt_toolkit import prompt
 from prompt_toolkit.key_binding.vi_state import InputMode
 from prompt_toolkit.completion import Completer, Completion, ThreadedCompleter
@@ -18,7 +18,6 @@ class SideCompletion(Completer):
         # Provide custom autocomplete suggestions based on the current input
         word_before_cursor = document.get_word_before_cursor(WORD=True)
         if word_before_cursor:
-            # word starts with 'f'
             try:
                 if(word_before_cursor.startswith('gs://')):
                     # TODO self.options = gcp.listdir
@@ -54,12 +53,14 @@ def echo_gcpdir(args: ArgumentParser, bucket_name: str, fzf: subprocess.Popen)->
 def walkdir(args: ArgumentParser, base_path_to_fzf: str)->str:
     base_path_to_fzf = base_path_to_fzf.replace('\n', '')
     fzf = subprocess.Popen(["fzf"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-    if base_path_to_fzf.startswith("gs://"):
-        echo_gcpdir(args, base_path_to_fzf, fzf)
-    else:
-        echo_localdir(args, base_path_to_fzf, fzf)
+    try:
+        if base_path_to_fzf.startswith("gs://"):
+            echo_gcpdir(args, base_path_to_fzf, fzf)
+        else:
+            echo_localdir(args, base_path_to_fzf, fzf)
+    except:
+        pass
 
-    fzf.stdin.close()
     output, _ = fzf.communicate()
     output = output.decode()
     return output
@@ -111,16 +112,22 @@ def action_logic(args: ArgumentParser, action: str, base_path_to_fzf: str)->str:
     else:
         print(f"Invalid movement option: {action}")
 
-    cmd = f"gsutil -m {action} {left_selected} {right_selected}".replace('\n', ' ')
+    cmd = ""
+    if base_path_to_fzf.startswith('gs://'):
+        cmd = f"gsutil -m {action} {left_selected} {right_selected}".replace('\n', ' ')
+    else:
+        cmd = f"{action} {left_selected} {right_selected}".replace('\n', ' ')
+
     return cmd
 
 
 def surf(args: ArgumentParser, basepath: str):
-    """Start sidewinder, lists a directory.
+    """Start sidewinder, event_loop for the TUI application.
     """
     if args.basepath != "":
         cache_data(args, str_to_cache=args.basepath, fname="basepaths")
         basepath_options = load_cache_data(args, fname="basepaths")
+        action: str = start_fzf(args, OPTIONS)
         base_path_to_fzf = start_fzf(args, basepath_options)
         print("Base path to look inside of ",base_path_to_fzf)
 
@@ -132,7 +139,6 @@ def surf(args: ArgumentParser, basepath: str):
                 print(f"gsutil credentials environment variable not set. \nCheck the {google_env_variable} environment variable.")
 
 
-        action: str = start_fzf(args, OPTIONS)
         result_cmd = action_logic(args, action, base_path_to_fzf)
 
         side_winder_completer = SideCompletion()
@@ -142,5 +148,15 @@ def surf(args: ArgumentParser, basepath: str):
         else: 
             result_cmd = prompt("Run this command? ", default=result_cmd, completer=thread_completer)
 
-        # TODO os.exec(result_cmd)
-        print("Executed", result_cmd)
+        if args.debug == True:
+            print("would execute: ", *result_cmd.split(' '))
+        else:
+            command_exec = ""
+            if PLATFORM.startswith("win"):
+                command_exec = subprocess.run(["powershell.exe", "-Command", result_cmd],
+                                        stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.decode()
+            else:
+                command_exec = subprocess.run([result_cmd],
+                                        stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.decode()
+
+            print(command_exec)

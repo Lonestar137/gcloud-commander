@@ -30,11 +30,15 @@ def load_cache_data(args: ArgumentParser, fname: str)->str:
         return None
 
 def filter_duplicates(args: ArgumentParser, item_to_find, filename: str)->bool:
+    """Used to check if item is already in cache file.
+    Returns:
+        bool: Returns True if item not in cache file(new item), False otherwise
+    """
     cache_file_contents = load_cache_data(args, filename.split('/')[-1:][0])
     if cache_file_contents == None:
         return True
 
-    if item_to_find not in cache_file_contents:
+    if item_to_find+'\n' not in cache_file_contents:
         if args.debug == True:
             logging.info(f"Found new basepath {item_to_find} to add to {filename}")
         return True
