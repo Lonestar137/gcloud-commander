@@ -44,14 +44,7 @@ def build_args_and_parse(arg_json_directory: str)->ArgumentParser:
                     logging.warn("Filtered params\n"+ positional_parameters + "\n" + kwparameters)
                     logging.warn("Trace:"+ e)
 
-
-    # parse the arguments
     args = parser.parse_args()
-
-    # if args.flag:
-    #     print("Flag is set")
-    # else:
-    #     print("Flag is not set")
 
     if args.debug == True:
         logging.info("Created Arguments:", args)
