@@ -7,8 +7,8 @@
         },
         "action": "",
         "help": "A flag to predefine basepath",
-        "type": "int",
-        "default": "",
+        "type": "str",
+        "default": ".",
         "nargs": "+",
         "choices": []
     },

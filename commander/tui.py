@@ -1,12 +1,10 @@
-import os 
 import sys
-import msvcrt
-import select
-import subprocess
+from logger import *
 from typing import List
 from argparse import ArgumentParser
-from logger import *
+from walker import sidewinder
 
+# TODO make this function non-blocking if there is no std input, then uncomment in main.
 def collect_pipe_input()->str:
     """Collect platform specific standard input text, i.e. from | 
 
@@ -18,14 +16,6 @@ def collect_pipe_input()->str:
         std_in_text += line
     return std_in_text
 
-def start_fzf(args: ArgumentParser, to_send: str)->str:
-    fzf = subprocess.Popen(["fzf"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-    output, _ = fzf.communicate(to_send.encode())
-    output = output.decode()
-
-    if args.debug:
-        logging.info("Selected item: ", output)
-    return output
 
 def entry_point(std_in_text: str, args: ArgumentParser):
     """Commandline args to pass to the program.
@@ -36,7 +26,10 @@ def entry_point(std_in_text: str, args: ArgumentParser):
         args (List[str]): program arguments to enable certain settings.
     """
     if std_in_text != "":
-        start_fzf(args, std_in_text)
+        basepath = start_fzf(args, std_in_text)
+        sidewinder.surf(args, basepath=basepath)
     else:
         if args.debug:
-            logging.info("Nothing to do")
+            logging.info("Starting sidewinder w/ no std input")
+        sidewinder.surf(args, "")
+        
