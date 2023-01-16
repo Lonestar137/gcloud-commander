@@ -1,7 +1,7 @@
 import os
 import platform
 
-CWD = os.getcwd().replace('\\', '/')
+CWD = os.path.dirname(os.path.abspath(__file__)).replace('\\', '/')
 CACHE_DIR = f"{CWD}/cache/"
 
 

@@ -53,7 +53,7 @@ def build_args_and_parse(arg_json_directory: str)->ArgumentParser:
 
 def main():
     try:
-        arg_json_directory = f"{CWD}/src/args/json/"
+        arg_json_directory = f"{CWD}/args/json/"
 
         args: ArgumentParser = build_args_and_parse(arg_json_directory)
 
