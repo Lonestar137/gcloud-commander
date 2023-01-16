@@ -1,8 +1,6 @@
-import pickle
-import os
-from logger import *
+from src.logger import *
 from argparse import ArgumentParser
-from constants import CACHE_DIR
+from src.constants import CACHE_DIR
 
 
 def cache_data(args: ArgumentParser, str_to_cache: str, fname: str):

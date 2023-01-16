@@ -12,6 +12,10 @@ lorem ipsum
 1. Add a new basepath, run the program with the `-b` or `--basepath` flag.  I.e. `gcmdr -b gs://bucket_name/my_folder`
 2. Enable vim keybinds: `gcmdr -v` or `gcmdr --vim`
 
+## Known issues
+
+- Currently, doesn't support filepaths on Windows where there is a space in the filepath.
+
 ## Philosophy
 
 1. Make your application do one thing and do it well: Write your application to perform a specific task, and make sure it does that task well. Avoid adding unnecessary features that would make the application more complex.

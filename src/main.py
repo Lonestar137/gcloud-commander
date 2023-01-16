@@ -1,13 +1,11 @@
 import os
 import json
 import argparse 
-from logger import *
-from args import arg_parse_rules
+from src.logger import *
+from src.args import arg_parse_rules
 from argparse import ArgumentParser
-from tui import entry_point, collect_pipe_input
-from constants import CWD
-
-# CWD = os.getcwd().replace('\\', '/')
+from src.tui import entry_point, collect_pipe_input
+from src.constants import CWD
 
 def get_argument_setting_values(arg_settings: dict)->tuple[list, dict]:
     """This function takes the settings for any arg in the args/json/*.json file and parses them.
@@ -53,10 +51,16 @@ def build_args_and_parse(arg_json_directory: str)->ArgumentParser:
         logging.info("Created Arguments:", args)
     return args
 
+def main():
+    try:
+        arg_json_directory = f"{CWD}/args/json/"
+
+        args: ArgumentParser = build_args_and_parse(arg_json_directory)
+
+        # entry_point(collect_pipe_input(), args)
+        entry_point("", args)
+    except KeyboardInterrupt as e:
+        print("Process closed due to keyboard interrupt.")
+
 if __name__ == "__main__":
-    arg_json_directory = f"{CWD}/commander/args/json/"
-
-    args: ArgumentParser = build_args_and_parse(arg_json_directory)
-
-    # entry_point(collect_pipe_input(), args)
-    entry_point("", args)
+    main()

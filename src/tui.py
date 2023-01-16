@@ -1,8 +1,7 @@
 import sys
-from logger import *
-from typing import List
+from src.logger import *
+from src.walker import sidewinder
 from argparse import ArgumentParser
-from walker import sidewinder
 
 # TODO make this function non-blocking if there is no std input, then uncomment in main.
 def collect_pipe_input()->str:

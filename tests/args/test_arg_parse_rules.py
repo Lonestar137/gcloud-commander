@@ -1,4 +1,4 @@
-from commander.args.arg_parse_rules import *
+from src.args.arg_parse_rules import *
 
 # should_default_be_added(settings: dict, arg_parse_params: dict)->dict:
 

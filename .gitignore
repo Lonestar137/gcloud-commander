@@ -1,4 +1,7 @@
 venv/*
 *__pycache__*
 *.log
-*cache/*
+*cache/basepaths
+dist*
+gcloud_commander.egg-info/*
+src/cache/basepaths
