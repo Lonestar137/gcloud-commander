@@ -34,28 +34,32 @@ class SideCompletion(Completer):
                     rest_of_word = opt[len(last_word):]
                     yield Completion(rest_of_word)
 
-def echo_localdir(args: ArgumentParser, base_path_to_fzf: str, fzf: subprocess.Popen)->None:
+def echo_localdir(args: ArgumentParser, action: str,base_path_to_fzf: str, fzf: subprocess.Popen)->None:
     for dirpath, dirnames, filenames in os.walk(base_path_to_fzf):
         dirpath = dirpath.replace('\\', '/')
         for filename in filenames:
-            line = f"{dirpath}/{filename}\n"
+            line = ""
+            if action.startswith("ls"):
+                line = f"{dirpath}/\n"
+            else:
+                line = f"{dirpath}/{filename}\n"
             fzf.stdin.write((line).encode())
 
-def echo_gcpdir(args: ArgumentParser, bucket_name: str, fzf: subprocess.Popen)->None:
+def echo_gcpdir(args: ArgumentParser, action: str, bucket_name: str, fzf: subprocess.Popen)->None:
     client = storage.Client()
     bucket_contents = client.list_blobs(bucket_name)
     for i in bucket_contents:
         fzf.stdin.write((i).encode())
 
 
-def walkdir(args: ArgumentParser, base_path_to_fzf: str)->str:
+def walkdir(args: ArgumentParser, action: str, base_path_to_fzf: str)->str:
     base_path_to_fzf = base_path_to_fzf.replace('\n', '')
     fzf = subprocess.Popen(["fzf"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     try:
         if base_path_to_fzf.startswith("gs://"):
-            echo_gcpdir(args, base_path_to_fzf, fzf)
+            echo_gcpdir(args, action, base_path_to_fzf, fzf)
         else:
-            echo_localdir(args, base_path_to_fzf, fzf)
+            echo_localdir(args, action, base_path_to_fzf, fzf)
     except:
         pass
 
@@ -72,9 +76,14 @@ def start_fzf(args: ArgumentParser, to_send: str)->str:
         logging.info("Selected item: ", output)
     return output
 
+def ls_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->tuple[str, str]:
+        left_selected: str = walkdir(args, action, base_path_to_fzf) 
+        right_selected: str = ""
+        return left_selected, right_selected
+
 def mv_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->tuple[str, str]:
-        left_selected: str = walkdir(args, base_path_to_fzf) 
-        right_selected: str = walkdir(args, base_path_to_fzf).strip()
+        left_selected: str = walkdir(args, action, base_path_to_fzf) 
+        right_selected: str = walkdir(args, action, base_path_to_fzf).strip()
 
         side_winder_completer = SideCompletion()
         thread_completer = ThreadedCompleter(side_winder_completer)
@@ -85,8 +94,8 @@ def mv_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->tuple[str
         return left_selected, right_selected
 
 def cp_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->tuple[str, str]:
-        left_selected: str = walkdir(args, base_path_to_fzf) # TODO add OPEN in browser option
-        right_selected: str = walkdir(args, base_path_to_fzf).strip()
+        left_selected: str = walkdir(args, action, base_path_to_fzf) # TODO add OPEN in browser option
+        right_selected: str = walkdir(args, action, base_path_to_fzf).strip()
         if args.vim == True:
             right_selected = prompt("Copy to: ", default=right_selected.replace('\n', ''), vi_mode=True)
         else: 
@@ -94,14 +103,16 @@ def cp_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->tuple[str
         return left_selected, right_selected
 
 def rm_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->tuple[str, str]:
-        left_selected: str = walkdir(args, base_path_to_fzf) # TODO add OPEN in browser option
+        left_selected: str = walkdir(args, action, base_path_to_fzf) # TODO add OPEN in browser option
         right_selected: str = ""
         return left_selected, right_selected
 
 def action_logic(args: ArgumentParser, action: str, base_path_to_fzf: str)->str:
     left_selected = ""
     right_selected = ""
-    if action.startswith("mv"):
+    if action.startswith("ls"):
+        left_selected, right_selected = ls_logic(args, action, base_path_to_fzf)
+    elif action.startswith("mv"):
         left_selected, right_selected = mv_logic(args, action, base_path_to_fzf)
     elif action.startswith("cp"):
         left_selected, right_selected = cp_logic(args, action, base_path_to_fzf)
@@ -147,14 +158,15 @@ def surf(args: ArgumentParser, basepath: str):
             result_cmd = prompt("Run this command? ", default=result_cmd, completer=thread_completer)
 
         if args.debug == True:
-            print("would execute: ", *result_cmd.split(' '))
+            print("would execute: ", result_cmd)
         else:
-            command_exec = ""
-            if PLATFORM.startswith("win"):
-                command_exec = subprocess.run(["powershell.exe", "-Command", result_cmd],
-                                        stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.decode()
-            else:
-                command_exec = subprocess.run([result_cmd],
-                                        stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.decode()
+            if result_cmd != "":
+                command_exec = ""
+                if PLATFORM.startswith("win"):
+                    command_exec = subprocess.run(["powershell.exe", "-Command", result_cmd],
+                                            stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.decode()
+                else:
+                    command_exec = subprocess.run([result_cmd],
+                                            stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.decode()
 
-            print(command_exec)
+                print(command_exec)

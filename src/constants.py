@@ -9,6 +9,7 @@ PLATFORM = platform.system().lower()
 
 
 OPTIONS = """
+ls
 cp
 mv
 rm

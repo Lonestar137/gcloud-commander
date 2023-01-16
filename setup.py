@@ -14,7 +14,8 @@ setup(
         'prompt_toolkit>=3.0.36',
         'protobuf>=4.21.12',
         'python_editor>=1.0.4',
-        'setuptools>=63.2.0'
+        'setuptools>=63.2.0',
+        'google-cloud-storage'
     ],
     entry_points={
         'console_scripts': [

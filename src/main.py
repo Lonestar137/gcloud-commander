@@ -52,12 +52,15 @@ def build_args_and_parse(arg_json_directory: str)->ArgumentParser:
     return args
 
 def main():
-    arg_json_directory = f"{CWD}/src/args/json/"
+    try:
+        arg_json_directory = f"{CWD}/src/args/json/"
 
-    args: ArgumentParser = build_args_and_parse(arg_json_directory)
+        args: ArgumentParser = build_args_and_parse(arg_json_directory)
 
-    # entry_point(collect_pipe_input(), args)
-    entry_point("", args)
+        # entry_point(collect_pipe_input(), args)
+        entry_point("", args)
+    except KeyboardInterrupt as e:
+        print("Process closed due to keyboard interrupt.")
 
 if __name__ == "__main__":
     main()
