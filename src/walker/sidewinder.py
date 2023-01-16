@@ -83,7 +83,8 @@ def ls_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->tuple[str
 
 def mv_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->tuple[str, str]:
         left_selected: str = walkdir(args, action, base_path_to_fzf) 
-        right_selected: str = walkdir(args, action, base_path_to_fzf).strip()
+        basepath_options = load_cache_data(args, fname="basepaths")
+        right_selected: str = start_fzf(args, basepath_options)
 
         side_winder_completer = SideCompletion()
         thread_completer = ThreadedCompleter(side_winder_completer)
@@ -95,7 +96,8 @@ def mv_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->tuple[str
 
 def cp_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->tuple[str, str]:
         left_selected: str = walkdir(args, action, base_path_to_fzf) # TODO add OPEN in browser option
-        right_selected: str = walkdir(args, action, base_path_to_fzf).strip()
+        basepath_options = load_cache_data(args, fname="basepaths")
+        right_selected: str = start_fzf(args, basepath_options)
         if args.vim == True:
             right_selected = prompt("Copy to: ", default=right_selected.replace('\n', ''), vi_mode=True)
         else: 
