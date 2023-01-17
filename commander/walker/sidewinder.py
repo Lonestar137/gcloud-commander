@@ -1,11 +1,12 @@
 import os
 import subprocess
-from src.logger import *
+from commander.logger import *
 from google.cloud import storage
 from prompt_toolkit import prompt
 from argparse import ArgumentParser
-from src.constants import OPTIONS, PLATFORM
-from src.walker.datacache import cache_data, load_cache_data
+from typing import Tuple
+from commander.constants import OPTIONS, PLATFORM
+from commander.walker.datacache import cache_data, load_cache_data
 from prompt_toolkit.completion import Completer, Completion, ThreadedCompleter
 
 class SideCompletion(Completer):
@@ -76,12 +77,12 @@ def start_fzf(args: ArgumentParser, to_send: str)->str:
         logging.info("Selected item: ", output)
     return output
 
-def ls_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->tuple[str, str]:
+def ls_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->Tuple[str, str]:
         left_selected: str = walkdir(args, action, base_path_to_fzf) 
         right_selected: str = ""
         return left_selected, right_selected
 
-def mv_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->tuple[str, str]:
+def mv_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->Tuple[str, str]:
         left_selected: str = walkdir(args, action, base_path_to_fzf) 
         basepath_options = load_cache_data(args, fname="basepaths")
         right_selected: str = start_fzf(args, basepath_options)
@@ -94,7 +95,7 @@ def mv_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->tuple[str
             right_selected = prompt("Move to: ", default=right_selected.replace('\n', ''), completer=thread_completer,)
         return left_selected, right_selected
 
-def cp_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->tuple[str, str]:
+def cp_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->Tuple[str, str]:
         left_selected: str = walkdir(args, action, base_path_to_fzf) # TODO add OPEN in browser option
         basepath_options = load_cache_data(args, fname="basepaths")
         right_selected: str = start_fzf(args, basepath_options)
@@ -104,7 +105,7 @@ def cp_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->tuple[str
             right_selected = prompt("Copy to: ", default=right_selected.replace('\n', ''))
         return left_selected, right_selected
 
-def rm_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->tuple[str, str]:
+def rm_logic(args: ArgumentParser, action:str, base_path_to_fzf: str)->Tuple[str, str]:
         left_selected: str = walkdir(args, action, base_path_to_fzf) # TODO add OPEN in browser option
         right_selected: str = ""
         return left_selected, right_selected
