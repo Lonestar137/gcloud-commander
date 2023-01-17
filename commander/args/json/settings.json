@@ -12,6 +12,19 @@
         "nargs": "+",
         "choices": []
     },
+    "basepath_filterby_regex": {
+        "required": false,
+        "flags": {
+            "small_form": "-f",
+            "long_form": "--filter_basepath"
+        },
+        "action": "",
+        "help": "Removes all base paths in cache that match a given regex.",
+        "type": "str",
+        "default": "",
+        "nargs": "+",
+        "choices": []
+    },
     "aging": {
         "required": false,
         "flags": {
