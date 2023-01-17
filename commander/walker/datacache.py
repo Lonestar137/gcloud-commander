@@ -1,6 +1,6 @@
-from src.logger import *
+from commander.logger import *
 from argparse import ArgumentParser
-from src.constants import CACHE_DIR
+from commander.constants import CACHE_DIR
 
 
 def cache_data(args: ArgumentParser, str_to_cache: str, fname: str):

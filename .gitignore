@@ -4,4 +4,4 @@ venv/*
 *cache/basepaths
 dist*
 gcloud_commander.egg-info/*
-src/cache/basepaths
+commander/cache/basepaths

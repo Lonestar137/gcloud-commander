@@ -1,6 +1,6 @@
 import sys
-from src.logger import *
-from src.walker import sidewinder
+from commander.logger import *
+from commander.walker import sidewinder
 from argparse import ArgumentParser
 
 # TODO make this function non-blocking if there is no std input, then uncomment in main.
@@ -25,7 +25,7 @@ def entry_point(std_in_text: str, args: ArgumentParser):
         args (List[str]): program arguments to enable certain settings.
     """
     if std_in_text != "":
-        basepath = start_fzf(args, std_in_text)
+        basepath = sidewinder.start_fzf(args, std_in_text)
         sidewinder.surf(args, basepath=basepath)
     else:
         if args.debug:

@@ -1,11 +1,11 @@
 import os
 import subprocess
-from src.logger import *
+from commander.logger import *
 from google.cloud import storage
 from prompt_toolkit import prompt
 from argparse import ArgumentParser
-from src.constants import OPTIONS, PLATFORM
-from src.walker.datacache import cache_data, load_cache_data
+from commander.constants import OPTIONS, PLATFORM
+from commander.walker.datacache import cache_data, load_cache_data
 from prompt_toolkit.completion import Completer, Completion, ThreadedCompleter
 
 class SideCompletion(Completer):

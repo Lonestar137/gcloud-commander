@@ -7,7 +7,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name='gcloud-commander',
-    version='0.1',
+    version='0.7',
     packages=find_packages(),
     python_requires='>=3.5',
     install_requires=[
@@ -19,7 +19,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'gcmdr=src.main:main'
+            'gcmdr=commander.main:main'
         ]
     },
     author='Garrett Jones',
@@ -31,5 +31,7 @@ setup(
         "Operating System :: Unix",
         "Operating System :: MacOS :: MacOS X",
         "Operating System :: Microsoft :: Windows",
-    ]
+    ],
+    include_package_data=True,
+    package_data={'': ["*.json", "*cache/*"]}
 )
