@@ -1,3 +1,4 @@
+import re
 import os
 import subprocess
 from commander.logger import *
@@ -132,11 +133,25 @@ def action_logic(args: ArgumentParser, action: str, base_path_to_fzf: str)->str:
 
     return cmd
 
+def filter_basepath(args: ArgumentParser, basepath_regex_str: str):
+    basepath_regex = re.compile(basepath_regex_str)
+
+    basepath_options = load_cache_data(args, fname="basepaths")
+    filtered_basepath_options = ""
+    for basepath in basepath_options.split('\n'):
+        match = re.search(basepath_regex, basepath)
+        if not match:
+            filtered_basepath_options += basepath+'\n'
+    
+    cache_data(args, str_to_cache=filtered_basepath_options, fname="basepaths", filemode="w")
+
 
 def surf(args: ArgumentParser, basepath: str):
     """Start sidewinder, event_loop for the TUI application.
     """
     if args.basepath != "":
+        if args.filter_basepath != None:
+            filter_basepath(args, args.filter_basepath)
         cache_data(args, str_to_cache=args.basepath, fname="basepaths")
         basepath_options = load_cache_data(args, fname="basepaths")
         action: str = start_fzf(args, OPTIONS)

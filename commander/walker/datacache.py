@@ -3,7 +3,7 @@ from argparse import ArgumentParser
 from commander.constants import CACHE_DIR
 
 
-def cache_data(args: ArgumentParser, str_to_cache: str, fname: str):
+def cache_data(args: ArgumentParser, str_to_cache: str, fname: str, filemode: str = 'a'):
     """Saves data to the cache locaton
 
     Args:
@@ -14,7 +14,7 @@ def cache_data(args: ArgumentParser, str_to_cache: str, fname: str):
     if not_duplicate:
         if args.debug == True:
             logging.info(f"Opening cache file at {filename}")
-        with open(filename, 'a') as f:
+        with open(filename, filemode) as f:
             f.write(str_to_cache + '\n')
 
 def load_cache_data(args: ArgumentParser, fname: str)->str:
