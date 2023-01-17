@@ -7,7 +7,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name='gcloud-commander',
-    version='0.7',
+    version='0.10',
     packages=find_packages(),
     python_requires='>=3.5',
     install_requires=[
@@ -33,5 +33,5 @@ setup(
         "Operating System :: Microsoft :: Windows",
     ],
     include_package_data=True,
-    package_data={'': ["*.json", "*cache/*"]}
+    package_data={'': ["*json/*", "*cache/sample"]}
 )

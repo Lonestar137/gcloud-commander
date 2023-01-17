@@ -6,8 +6,9 @@ from commander.args import arg_parse_rules
 from argparse import ArgumentParser
 from commander.tui import entry_point, collect_pipe_input
 from commander.constants import CWD
+from typing import Tuple
 
-def get_argument_setting_values(arg_settings: dict)->tuple[list, dict]:
+def get_argument_setting_values(arg_settings: dict)->Tuple[list, dict]:
     """This function takes the settings for any arg in the args/json/*.json file and parses them.
 
     Args:
